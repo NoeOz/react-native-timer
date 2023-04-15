@@ -10,12 +10,10 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
       {!finishTimer ? (
-        <TouchableOpacity
-          style={styles.containerText}
-          onPress={() => setFinishTimer(false)}
-        >
+        <TouchableOpacity style={styles.containerText}>
           <Timer
             remainingTime={30}
+            typeTimer={"milisec"}
             callback={() => setFinishTimer(true)}
             style={styles.textStyle}
           />
