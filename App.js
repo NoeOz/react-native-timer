@@ -7,7 +7,11 @@ import {
 } from "react-native";
 import Timer from "./src/components/Timer";
 import { useState } from "react";
-import { colorPalette, customizeText, globalStyle } from "./src/style/globalStyles";
+import {
+  colorPalette,
+  customizeText,
+  globalStyle,
+} from "./src/style/globalStyles";
 
 export default function App() {
   const [finishTimer, setFinishTimer] = useState(false);
@@ -20,7 +24,7 @@ export default function App() {
    */
   const SimpleTimer = () => {
     return !finishTimer ? (
-      <TouchableOpacity
+      <View
         style={{
           ...globalStyle.card,
           backgroundColor: colorPalette.cactus_1,
@@ -32,8 +36,9 @@ export default function App() {
           typeTimer={"milisec"}
           callback={() => setFinishTimer(true)}
           style={customizeText(80, "dark", "left", { letterSpacing: 20 })}
+          stopControls={true}
         />
-      </TouchableOpacity>
+      </View>
     ) : (
       <TouchableOpacity onPress={() => setFinishTimer(false)}>
         <Text style={customizeText(25, "normal", "left")}>Reload</Text>
@@ -55,7 +60,9 @@ export default function App() {
             style={{ marginVertical: 10 }}
             onPress={() => setTypeTimer("simple")}
           >
-            <Text style={customizeText(25, "normal", "left")}>Simple</Text>
+            <Text style={customizeText(25, "normal", "left")}>
+              Just simple timer
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
