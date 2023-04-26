@@ -43,18 +43,20 @@ const TimerMilisec = (props) => {
    * or until a stop control is triggered.
    */
   function runCounter() {
-    if (!stopControl)
-      setTimeout(() => {
+    if (!stopControl) {
+      const timerId = setTimeout(() => {
         if (countdown > 0) {
           setCountdown((countdown) => countdown - 30);
-        } else controlFinish();
+        } else controlFinish(timerId);
       }, 5);
+    }
   }
 
   /**
    * The function "controlFinish" calls a callback function.
    */
-  function controlFinish() {
+  function controlFinish(timerId) {
+    clearTimeout(timerId)
     callback();
   }
 
@@ -70,7 +72,6 @@ const TimerMilisec = (props) => {
   return (
     <TouchableOpacity onPress={handleStop}>
       <Text {...customPropsText}>{`${seconds}`}</Text>
-      <Line />
     </TouchableOpacity>
   );
 };
