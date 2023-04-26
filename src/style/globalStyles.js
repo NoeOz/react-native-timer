@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export const colorPalette = {
   cactus_1: "#abc4aa",
   background: "#121212",
+  cool_gray: "#4B576E",
   noir: "#000000",
   snow: "#ffffff",
 };

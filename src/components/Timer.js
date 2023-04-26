@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Text } from "react-native";
+import { Text, Dimensions } from "react-native";
 
 const TimerSec = (props) => {
   const { remainingTime, callback, ...customPropsText } = props;
@@ -45,8 +45,9 @@ const TimerMilisec = (props) => {
   function runCounter() {
     if (!stopControl)
       setTimeout(() => {
-        if (countdown > 0) setCountdown((countdown) => countdown - 30);
-        else controlFinish();
+        if (countdown > 0) {
+          setCountdown((countdown) => countdown - 30);
+        } else controlFinish();
       }, 5);
   }
 
@@ -69,6 +70,7 @@ const TimerMilisec = (props) => {
   return (
     <TouchableOpacity onPress={handleStop}>
       <Text {...customPropsText}>{`${seconds}`}</Text>
+      <Line />
     </TouchableOpacity>
   );
 };

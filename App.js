@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   StatusBar,
+  TextInput,
 } from "react-native";
 import Timer from "./src/components/Timer";
 import { useState } from "react";
@@ -15,7 +16,25 @@ import {
 
 export default function App() {
   const [finishTimer, setFinishTimer] = useState(false);
-  const [typeTimer, setTypeTimer] = useState("none");
+  const [startTimer, setStartTimer] = useState(false);
+  const [time, setTime] = useState(null);
+
+  function controlTimeSet(value = new Number()) {
+    if ((value <= 60 && value > 0) || value === "") {
+      setTime(value);
+      setFinishTimer(false);
+    }
+  }
+
+  function finish() {
+    setFinishTimer(true);
+    setStartTimer(false);
+  }
+
+  function start() {
+    setStartTimer(!startTimer);
+    setFinishTimer(false);
+  }
 
   /**
    * This is a function that returns a timer component that counts down from 30 seconds and can be
@@ -23,65 +42,64 @@ export default function App() {
    * @returns A component that conditionally renders a Timer component or a Text
    */
   const SimpleTimer = () => {
-    return !finishTimer ? (
-      <View
-        style={{
-          ...globalStyle.card,
-          backgroundColor: colorPalette.cactus_1,
-          width: "90%",
-        }}
-      >
-        <Timer
-          remainingTime={30}
-          typeTimer={"milisec"}
-          callback={() => setFinishTimer(true)}
-          style={customizeText(80, "dark", "left", { letterSpacing: 20 })}
-          stopControls={true}
-        />
-      </View>
-    ) : (
-      <TouchableOpacity onPress={() => setFinishTimer(false)}>
-        <Text style={customizeText(25, "normal", "left")}>Reload</Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const SelectTimer = () => {
     return (
-      <View
-        style={{
-          ...globalStyle.card,
-          width: "90%",
-        }}
-      >
-        <Text style={customizeText(40, "normal", "left")}>Timer</Text>
-        <View style={{ alignSelf: "flex-end", marginTop: 15 }}>
-          <TouchableOpacity
-            style={{ marginVertical: 10 }}
-            onPress={() => setTypeTimer("simple")}
-          >
-            <Text style={customizeText(25, "normal", "left")}>
-              Just simple timer
-            </Text>
-          </TouchableOpacity>
+      !finishTimer && (
+        <View
+          style={{
+            ...globalStyle.card,
+            backgroundColor: colorPalette.noir,
+            width: "100%",
+          }}
+        >
+          <Timer
+            remainingTime={time}
+            typeTimer={"milisec"}
+            callback={() => finish()}
+            style={customizeText(80, "normal", "left", { letterSpacing: 20 })}
+            stopControls={true}
+          />
         </View>
-      </View>
+      )
     );
   };
 
   const RenderTimer = () => {
-    const timers = {
-      simple: <SimpleTimer />,
-      none: <SelectTimer />,
-    };
-
-    return timers[typeTimer];
+    if (startTimer) return <SimpleTimer />;
+    else
+      return (
+        <View style={{ alignSelf: "flex-end", marginTop: 15 }}>
+          <TouchableOpacity
+            style={{ marginVertical: 10 }}
+            onPress={() => start()}
+          >
+            <Text style={customizeText(25, "normal", "left")}>
+              {finishTimer ? "Reload" : "Start timer"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
   };
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <RenderTimer />
+      <View
+        style={{
+          ...globalStyle.card,
+          width: "100%",
+        }}
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={customizeText(40, "normal", "left")}>Timer</Text>
+          <TextInput
+            style={styles.inputTimer}
+            value={time}
+            onChangeText={(value) => controlTimeSet(value)}
+            keyboardType={"number-pad"}
+          />
+        </View>
+        <RenderTimer />
+      </View>
     </View>
   );
 }
@@ -93,5 +111,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: "2.5%",
+  },
+  inputTimer: {
+    ...customizeText(40, "normal", "center"),
+    backgroundColor: colorPalette.cool_gray,
+    padding: "2%",
+    flex: 1,
+    marginLeft: "5%",
+    borderRadius: 10,
   },
 });
